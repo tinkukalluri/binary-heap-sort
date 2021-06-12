@@ -20,7 +20,7 @@ struct node
 
 class max_heap
 {
-private:
+protected:
     int first=1;
     node* rroot;
     node* act;
@@ -218,6 +218,87 @@ void traverse()
     traverse11(rroot);
 }
 
+};
+
+class min_heap : public max_heap
+{
+    public:
+ void push(int x)
+    {
+        x=-x;
+        node *new1=new node;
+        new1->data=x;
+        new1->left=NULL;
+        new1->right=NULL;
+        new1->prev=NULL;
+        if(first==1)
+        {
+            rroot=new1;
+            q1.push(new1);
+            q1.push(new1);
+            act=rroot;
+            last=rroot;
+             stack1.push(new1);
+            first++;
+        }else
+        {
+            node *temp1=q1.front();
+            act=temp1;
+            stack1.push(new1);
+            q1.pop();
+            if(temp1->left==NULL)
+            {
+                temp1->left=new1;
+                new1->prev=temp1;
+                q1.push(new1);
+                q1.push(new1);
+                check(new1);
+
+
+            }else if(temp1->right==NULL)
+            {
+                temp1->right=new1;
+                new1->prev=temp1;
+                q1.push(new1);
+                q1.push(new1);
+                check(new1);
+            }
+        }
+    }
+
+    int peek()
+    {
+        return -(rroot->data);
+    }
+
+    void traverse()
+    {
+        traverse11(rroot);
+    }
+
+     void traverse11(node *ptr , int x=0)
+{
+    if(ptr!=NULL)
+    {
+
+        cout<<-(ptr->data)<<"\t"<<x<<endl;
+        traverse11(ptr->left  , 1);
+        traverse11(ptr->right , 2);
+    }
+}
+
+
+vector<int> heap_sort()
+    {
+        vector<int> v1;
+        while(stack1.size()!=0)
+        {
+            int x=peek();
+            v1.push_back(x);
+            pop();
+        }
+        return v1;
+    }
 
 
 
@@ -257,4 +338,22 @@ int main()
             cout<<it1<<"\t";
         }
         cout<<endl;
+
+        min_heap mi1;
+        mi1.push(1);
+        mi1.push(2);
+        mi1.push(3);
+        mi1.push(4);
+        mi1.push(5);
+
+        cout<<"min heap"<<mi1.peek()<<endl;
+        cout<<"min heap sort"<<endl;
+             mi1.traverse();
+        vector<int> ans2=mi1.heap_sort();
+        for(auto& it1:ans2)
+        {
+            cout<<it1<<"\t";
+        }
+
+
 }
